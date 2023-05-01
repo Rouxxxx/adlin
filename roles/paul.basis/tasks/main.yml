@@ -26,9 +26,7 @@
   ansible.posix.authorized_key:
     user: "{{ username }}"
     state: present
-    key: '{{ item }}'
-  with_file: 
-    - "id_rsa.pub"
+    key: '{{ ssh_key }}'
 
 - name: "ensure sudo without password"
   lineinfile:
