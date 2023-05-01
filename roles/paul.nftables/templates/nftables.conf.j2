@@ -1,0 +1,19 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet ip_table {
+	chain input {
+		type filter hook input priority filter; policy drop;
+        
+        {% for elem in nftables_tcp %}
+            tcp dport {{elem}} accept
+        {% endfor %}
+        {% for elem in nftables_udp %}
+            udp dport {{elem}} accept
+        {% endfor %}
+
+        icmpv6 type echo-request accept
+        ct state established,related accept
+	}
+}

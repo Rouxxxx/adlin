@@ -1,0 +1,17 @@
+- name: check if hugo folder already exists
+  become: true
+  stat:
+    path: "/var/www/html/adlin"
+  register: hugo
+
+- name: ensure hugo website is generated
+  ansible.builtin.command: "hugo -s sources/vitrine/"
+  delegate_to: "localhost"
+  when: hugo.stat.exists is defined and not hugo.stat.exists
+
+- name: ensure vitrine website is copied
+  become: true
+  ansible.builtin.copy:
+    src: sources/vitrine/public/
+    dest: /var/www/html/adlin
+  when: hugo.stat.exists is defined and not hugo.stat.exists

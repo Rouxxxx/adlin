@@ -1,0 +1,25 @@
+server:
+    listen: 0.0.0.0@53
+    listen: ::@53
+    user: knot:knot
+
+key:
+  - id: happydomain
+    algorithm: hmac-sha512
+    secret: {{ happydomain_secret }}
+
+acl:
+  - id: acl_happydomain
+    key: happydomain
+    action: transfer
+    action: update
+
+zone:
+  - domain: {{ paul_leroux_srs }}
+    acl: [acl_happydomain]
+    storage: /var/lib/knot/zones
+    file: {{ paul_leroux_srs }}.zone
+
+log:
+  - target: syslog
+    any: info

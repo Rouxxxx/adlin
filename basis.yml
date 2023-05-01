@@ -1,0 +1,7 @@
+---
+- hosts: all
+  name: ensure basis remote configuration
+  remote_user: root
+
+  roles:
+    - role: paul.basis

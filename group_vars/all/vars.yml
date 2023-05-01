@@ -1,0 +1,14 @@
+paul_leroux_adlin2024: paul.leroux.adlin2024.drivee.site
+paul_leroux_srs: paul.leroux.srs.drivee.site
+email: paul.leroux@epita.fr
+local_user: paul
+username: paul.leroux
+
+letsencrypt_adlin2024: "/etc/letsencrypt/live/paul.leroux.adlin2024.drivee.site"
+letsencrypt_srs: "/etc/letsencrypt/live/paul.leroux.srs.drivee.site"
+
+IPV6: "2a01:e0a:518:833:21::1"
+
+# vault encrypted vars
+happydomain_password: "{{ vault_happydomain_password }}"
+happydomain_secret: "{{ vault_happydomain_secret }}"

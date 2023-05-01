@@ -1,0 +1,50 @@
+- name: ensure python3 and pip are installed
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - python3
+      - python3-pip
+    state: present
+
+- name: ensure happydomain is imported
+  ansible.builtin.import_role:
+    name: happydns.happydomain.happydomain
+  vars:
+    use_container: no
+
+- happydns.happydomain.user:
+    username: "{{ email }}"
+    password: "{{ happydomain_password }}"
+
+- name: ensure knot as a provider
+  happydns.happydomain.provider:
+    name: myself
+    type: DDNSServer
+    data:
+      server: "localhost"
+      keyname: happydomain
+      keyblob: "{{ happydomain_secret }}"
+    happydomain_username: "{{ email }}"
+    happydomain_password: "{{ happydomain_password }}"
+
+- name: ensure the domain is added, and the zone imported
+  happydns.happydomain.domain:
+    provider: myself
+    domain: "{{ paul_leroux_srs }}"
+    happydomain_username: "{{ email }}"
+    happydomain_password: "{{ happydomain_password }}"
+    import_zone: true
+  register: registered_zone
+
+
+- happydns.happydomain.service:
+    happydomain_username: "{{ email }}"
+    happydomain_password: "{{ happydomain_password }}"
+    domain: "{{ paul_leroux_srs }}"
+    zone: "{{ registered_zone.current_zone }}"
+    subdomain: "my_cool_subdomain"
+    type: abstract.Server
+    service:
+      AAAA: "{{ IPV6 }}"
+      NS: "{{ IPV6 }}"
+    apply_changes: yes

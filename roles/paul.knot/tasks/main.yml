@@ -1,0 +1,49 @@
+- name: ensure apache, certbot and knot are installed
+  become: true
+  ansible.builtin.apt:
+    name:
+      - knot
+      - knot-dnsutils
+
+
+- name: ensure knot configuration is copied
+  become: true
+  ansible.builtin.template:
+    src: knot.conf.j2
+    dest: /etc/knot/knot.conf
+  notify:
+    - restart knot
+
+- name: check if knot zone conf already exists
+  become: true
+  stat:
+    path: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
+  register: knot_conf
+      
+- name: ensure zones folder is created
+  become: true
+  file:
+    path: /var/lib/knot/zones/
+    state: directory
+    group: knot
+    owner: knot
+  when: not knot_conf.stat.exists
+  notify:
+    - restart knot
+
+- name: ensure knot zone config file is copied
+  become: true
+  ansible.builtin.template:
+    src: template.zone.j2
+    dest: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
+
+  when: not knot_conf.stat.exist
+  notify:
+    - restart knot
+
+- name: enable knot service at start
+  become: true
+  ansible.builtin.service:
+    name: knot
+    enabled: true
+  when: not knot_conf.stat.exists

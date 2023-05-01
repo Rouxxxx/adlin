@@ -1,0 +1,12 @@
+$ORIGIN {{ paul_leroux_srs }}.
+$TTL 10m
+
+@           IN      SOA     ns contact.{{ paul_leroux_srs }}. (
+                                    5502343         ; serial
+                                    1h              ; refresh
+                                    10m             ; retry
+                                    24h             ; expire
+                                    4m)             ; negative caching TTL
+            IN      NS      ns
+            IN      AAAA    {{ IPV6 }}
+            IN      TXT     "AAAA"

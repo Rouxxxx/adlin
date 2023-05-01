@@ -1,0 +1,39 @@
+---
+- hosts: all
+  name: ensure vitrine website is built on remote host
+  remote_user: "{{ username }}"
+  become: true
+
+  roles:
+    - role: paul.hugo
+
+    - role: geerlingguy.certbot
+      vars:
+        certbot_create_if_missing: yes
+        certbot_create_standalone_stop_services:
+          - nginx
+          - httpd
+        certbot_admin_email: "{{ email }}"
+        certbot_certs:
+          - domains:
+              - "{{ paul_leroux_adlin2024 }}"
+
+    - role: geerlingguy.apache
+      vars:
+        apache_create_vhosts: true
+        apache_vhosts_filename: "adlin2024.conf"
+        apache_vhosts:
+          - servername: "{{ paul_leroux_adlin2024 }}"
+            documentroot: "/var/www/html/adlin"
+        apache_vhosts_ssl:
+          - servername: "{{ paul_leroux_adlin2024 }}"
+            documentroot: "/var/www/html/adlin"
+            certificate_file: "{{ letsencrypt_adlin2024 }}/cert.pem"
+            certificate_key_file: "{{ letsencrypt_adlin2024 }}/privkey.pem"
+            certificate_chain_file: "{{ letsencrypt_adlin2024 }}/fullchain.pem"
+
+        apache_mods_enabled:
+          - rewrite
+          - ssl
+          - socache_shmcb
+          - headers

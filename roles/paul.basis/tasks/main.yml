@@ -1,0 +1,38 @@
+- name: ensure apt is at last version
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: yes
+    cache_valid_time: 86400 # One day
+
+- name: ensure sudo is ok
+  ansible.builtin.apt:
+    update_cache: true
+    name: sudo
+
+- name: ensure ssh_group group exists
+  ansible.builtin.group:
+    name: ssh_group
+    state: present
+
+- name: ensure paul.leroux as an account (with sudo perms and in ssh_group to restrain connections)
+  ansible.builtin.user:
+    name: "{{ username }}"
+    state: present
+    shell: /bin/bash
+    groups: sudo,ssh_group
+    append: yes
+
+- name: add existing ssh keys to paul.leroux user
+  ansible.posix.authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: '{{ item }}'
+  with_file: 
+    - "id_rsa.pub"
+
+- name: "ensure sudo without password"
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"

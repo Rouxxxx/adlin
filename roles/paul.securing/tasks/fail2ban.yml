@@ -1,0 +1,19 @@
+- name: ensure fail2ban is updated
+  ansible.builtin.apt:
+    name: fail2ban
+    state: latest
+  notify:
+    - restart fail2ban
+
+- name: Import fail2ban jail configuration at {{ fail2ban_conf_dir_location }}
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: "/etc/fail2ban/jail.local"
+  notify:
+    - restart fail2ban
+  
+- name: ensure fail2ban at startup
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true

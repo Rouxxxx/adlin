@@ -1,0 +1,56 @@
+- name: ensure ssh is updated
+  ansible.builtin.apt:
+    name: openssh-server
+    state: latest
+  notify:
+    - restart ssh
+
+- name : ensure passwords aren't allowed
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitEmptyPasswords'
+    line: PermitEmptyPasswords no
+  notify:
+    - restart ssh
+- name : ensure can't ssh to root
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: PermitRootLogin yes
+  notify:
+    - restart ssh
+
+- name : ensure protocol 1 is disabled
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Protocol'
+    line: Protocol 2
+  notify:
+    - restart ssh
+
+- name : ensure ssh connections only to those who're in ssh_group
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AllowGroups'
+    line: AllowGroups ssh_group
+  notify:
+    - restart ssh
+  
+- name : ensure X11 forwarding is disabled
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^X11Forwarding'
+    line: X11Forwarding no
+  notify:
+    - restart ssh
+
+  - name: ensure ssh at startup
+  ansible.builtin.service:
+    name: sshd
+    state: started
+    enabled: true

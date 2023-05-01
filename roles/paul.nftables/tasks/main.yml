@@ -1,0 +1,20 @@
+- name: ensure nftables is installed
+  become: true
+  ansible.builtin.apt:
+    name: 
+      - nftables
+
+- name: ensure nftables at startup
+  become: true
+  ansible.builtin.service:
+    name: nftables
+    enabled: true
+    state: started
+
+- name: ensure proper nftables configuration
+  become: true
+  ansible.builtin.template:
+    src: nftables.conf.j2
+    dest: /etc/nftables.conf
+  notify:
+    - restart nftables

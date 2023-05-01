@@ -1,0 +1,21 @@
+---
+- hosts: all
+  name: ensure remote host is configured
+  remote_user: "{{ username }}"
+  become: true
+
+  roles:
+    - role: paul.securing
+
+    - role: paul.nftables
+      vars:
+        nftables_udp:
+          - 53
+        nftables_tcp:
+          - 22
+          - 53
+          - 80
+          - 443
+          - 8081
+          - 42912
+        
