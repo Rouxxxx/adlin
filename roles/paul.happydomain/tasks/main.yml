@@ -27,6 +27,7 @@
       keyblob: "{{ happydomain_secret }}"
     happydomain_username: "{{ email }}"
     happydomain_password: "{{ happydomain_password }}"
+  when: knot_zone_exists.stat.exists is defined and not knot_zone_exists.stat.exists
 
 - name: ensure the domain is added, and the zone imported
   happydns.happydomain.domain:
@@ -36,6 +37,7 @@
     happydomain_password: "{{ happydomain_password }}"
     import_zone: true
   register: registered_zone
+  when: knot_zone_exists.stat.exists is defined and not knot_zone_exists.stat.exists
 
 
 - happydns.happydomain.service:
@@ -49,3 +51,4 @@
       AAAA: "{{ IPV6 }}"
       NS: "{{ IPV6 }}"
     apply_changes: yes
+  when: knot_zone_exists.stat.exists is defined and not knot_zone_exists.stat.exists
