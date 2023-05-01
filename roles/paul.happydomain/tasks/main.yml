@@ -23,6 +23,7 @@
     data:
       server: "localhost"
       keyname: happydomain
+      algorithm: hmac-sha512
       keyblob: "{{ happydomain_secret }}"
     happydomain_username: "{{ email }}"
     happydomain_password: "{{ happydomain_password }}"
