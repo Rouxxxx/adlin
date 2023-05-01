@@ -7,6 +7,10 @@
   roles:
     - role: paul.hugo
 
+    - role: paul.knot
+
+    - role: paul.happydomain
+
     - role: geerlingguy.certbot
       vars:
         certbot_create_if_missing: yes
@@ -38,6 +42,4 @@
           - socache_shmcb
           - headers
       
-    - role: paul.knot
 
-    - role: paul.happydomain
