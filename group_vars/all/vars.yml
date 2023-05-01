@@ -15,5 +15,5 @@ happydomain_secret: "{{ vault_happydomain_secret }}"
 
 ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaU24A+48Rmta575k2ORuqOE7NADmNcERz6wc8Zxqx4k6nKPkR097QG90w5YrfOiBSXWL0T75FuKvFbCeU3JyQbq2VP7N+KOFe3Qflhg8ieF65CNNhmrDbRc0gkKaVfdqKEp+xBXbn4xE9QdMBsakaOyAvjmiWEzAvrng7Pzat4780LxCVnEPUxTJtZN89msn3ag7cEknRtiH3ShD3gEgClEwVDl0oDUe0+mUGqQUMLNR7OtsIgFkoaMOgK0Mt1nY8Cpd3xltyKzs4lagAhIpzKNDQCJsM8jp8O0OXnPqbKHollBLijQtLMI/K2Np0Fm720RWd3GPqiTf6DUWltKdqW+G7bR4Wj1DYDYi8Q9b75IFGMp58ZrwB3HXN1JuiY7otlT2gHawEjcsFBh4KNR/CNps0RMy4LwWsnsL0vKRHju6uXBrxszGfQNuiVL5bKQc40tF00qoPb0CAz2PmM6K3xAsE3h28Uo986IiKIt7Yskp2BjgsJup3wJ+B9FfvV0M= paul@paul-gl753vd"
 
-acme_dir: "https://acme-v02.api.letsencrypt.org/directory"
-acme_server: "{{ acme_directory }}"
+acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+certbot_acme_server: "{{ acme_directory }}"
