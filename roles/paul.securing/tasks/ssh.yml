@@ -13,6 +13,7 @@
     line: PermitEmptyPasswords no
   notify:
     - restart ssh
+
 - name : ensure can't ssh to root
   become: true
   ansible.builtin.lineinfile:
@@ -49,7 +50,7 @@
   notify:
     - restart ssh
 
-  - name: ensure ssh at startup
+- name: ensure ssh at startup
   ansible.builtin.service:
     name: sshd
     state: started
