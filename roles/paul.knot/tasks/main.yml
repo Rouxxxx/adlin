@@ -18,6 +18,7 @@
   become: true
   stat:
     path: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
+  register: knot_zone_exists
       
 - name: ensure zones folder is created
   become: true
@@ -36,6 +37,7 @@
     dest: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
   notify:
     - restart knot
+  when: knot_zone_exists.stat.exists is defined and not knot_zone_exists.stat.exists
 
 - name: enable knot service at start
   become: true
