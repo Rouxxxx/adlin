@@ -18,7 +18,6 @@
   become: true
   stat:
     path: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
-  register: knot_conf
       
 - name: ensure zones folder is created
   become: true
@@ -27,7 +26,6 @@
     state: directory
     group: knot
     owner: knot
-  when: not knot_conf.stat.exists
   notify:
     - restart knot
 
@@ -36,8 +34,6 @@
   ansible.builtin.template:
     src: template.zone.j2
     dest: "/var/lib/knot/zones/{{ paul_leroux_srs }}.zone"
-
-  when: not knot_conf.stat.exist
   notify:
     - restart knot
 
