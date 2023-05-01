@@ -11,7 +11,7 @@
       vars:
         certbot_create_if_missing: yes
         certbot_create_standalone_stop_services:
-          - nginx
+          - apache2
           - httpd
         certbot_admin_email: "{{ email }}"
         certbot_certs:
