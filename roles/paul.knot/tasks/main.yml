@@ -42,4 +42,3 @@
   ansible.builtin.service:
     name: knot
     enabled: true
-  when: not knot_conf.stat.exists
